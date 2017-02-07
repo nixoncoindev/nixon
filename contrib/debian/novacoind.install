@@ -1,0 +1,2 @@
+debian/bin/NixonCoind usr/bin
+src/NixonCoind usr/lib/NixonCoin

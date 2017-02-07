@@ -1,0 +1,5 @@
+NixonCoin-qt usr/bin
+share/pixmaps/NixonCoin32.xpm usr/share/pixmaps
+share/pixmaps/NixonCoin80.xpm usr/share/pixmaps
+debian/NixonCoin-qt.desktop usr/share/applications
+debian/NixonCoin-qt.protocol usr/share/kde4/services/

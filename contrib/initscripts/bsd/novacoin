@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: NixonCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# NixonCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable NixonCoin service.
+# NixonCoin_config (path): Set to /usr/local/etc/NixonCoin.conf by default.
+# NixonCoin_user:  The user account NixonCoin daemon runs as. It uses 'root' user by default.
+# NixonCoin_group: The group account NixonCoin daemon runs as. It uses 'wheel' group by default.
+# NixonCoin_datadir (str): Default to "/var/db/NixonCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=NixonCoin
+rcvar=NixonCoin_enable
+
+: ${NixonCoin_enable:=NO}
+: ${NixonCoin_config=/usr/local/etc/NixonCoin.conf}
+: ${NixonCoin_datadir=/var/db/NixonCoin}
+: ${NixonCoin_user="root"}
+: ${NixonCoin_group="wheel"}
+
+required_files=${NixonCoin_config}
+command=/usr/local/bin/NixonCoind
+NixonCoin_chdir=${NixonCoin_datadir}
+pidfile="${NixonCoin_datadir}/NixonCoind.pid"
+stop_cmd=NixonCoin_stop
+command_args="-conf=${NixonCoin_config} -datadir=${NixonCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+NixonCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${NixonCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${NixonCoin_user}:${NixonCoin_group} ${NixonCoin_datadir}
+}
+
+NixonCoin_prestart()
+{
+	if [ ! -d "${NixonCoin_datadir}/." ]; then
+		NixonCoin_create_datadir || return 1
+	fi
+}
+
+NixonCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+NixonCoin_stop()
+{
+    NixonCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${NixonCoin_config} -datadir=${NixonCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

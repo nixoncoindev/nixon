@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=NixonCoin
+Comment=NixonCoin P2P Cryptocurrency
+Comment[ru]=NixonCoin, P2P криптовалюта
+Comment[fr]=NixonCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=NixonCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/NixonCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/NixonCoin80.xpm
+MimeType=x-scheme-handler/NixonCoin;
+Categories=Office;

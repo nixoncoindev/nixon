@@ -1,0 +1,11 @@
+[Unit]
+Description=NixonCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=NixonCoin
+ExecStart=/opt/NixonCoin/NixonCoind
+
+[Install]
+WantedBy=multi-user.target
